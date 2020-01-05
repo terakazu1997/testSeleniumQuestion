@@ -33,7 +33,7 @@ public class TestPassPatternAndAnswerRandom extends BaseTestVariable{
           changeFMData.UpdateQuestionDefault();
     }
     public void passChange(int checkCount) throws InterruptedException, IOException {
-        driver.get(FM_TOP_URL);
+        driver.navigate().refresh();
         Thread.sleep(THREAD_TIME);  // Let the user actually see something!
         TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);        testFuncs.makeBrowserScreenShot("トップ画面初期表示");
         //1番目のボタンリストをクリック
@@ -51,8 +51,8 @@ public class TestPassPatternAndAnswerRandom extends BaseTestVariable{
         alert.accept();
         testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
         Thread.sleep(THREAD_TIME);
-        testFuncs.underScroll( WINDOW_HEIGHT, 8,"合否結果画面スクロール", THREAD_TIME);
-        driver.get(FM_TOP_URL);
+        testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
+        driver.navigate().refresh();
         changeFMData.selectFMUserInfo();
     }
 }

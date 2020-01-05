@@ -17,6 +17,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import testCase.TestChangeChoiceCnt;
 import testCase.TestChoiceCheck;
@@ -38,8 +41,14 @@ public class SampleTest extends BaseTestVariable{
 
     // コンストラクタ フォルダ作成して、準備をする。
     public SampleTest() {
+        //IE用の設定
+        DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+        capabilities.setCapability(CapabilityType.BROWSER_NAME, "IE");
+        capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
         System.setProperty("webdriver.chrome.driver", "./exe/chromedriver");
+        //System.setProperty("webdriver.ie.driver", "./exe/IEDriverServer.exe");
         driver = new ChromeDriver();
+        //driver = new InternetExplorerDriver(capabilities);
         driver.manage().window().setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         TestFuncs testFuncs = new TestFuncs(folderList);
         this.shapingToday = testFuncs.makeFolder();
@@ -48,17 +57,18 @@ public class SampleTest extends BaseTestVariable{
     @Test
     public void TestSelenium() throws InterruptedException, IOException {
         String currentFolderKey = "";
+        driver.get(FM_TOP_URL);
         //シナリオテスト 4つ選択（ダイアログ確認と当日受講回数2回含む)
         currentFolderKey = "test_scenario_check_4";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
         scenarioCheck4 = new TestScenarioCheck4(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        //scenarioCheck4.testScenarioCheck4();
+        scenarioCheck4.testScenarioCheck4();
         //選択肢を1つから3つ選択のテスト
         for(int i=1;i<4;i++) {
             currentFolderKey = "test_check" + i;
             targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
             checkTest = new TestChoiceCheck(driver,targetFolderPath,currentFolderKey, imgFileListMap, i);
-            //checkTest.testChoiceCheck();
+            checkTest.testChoiceCheck();
         }
 
         //問題2、3、5択に変更テスト
@@ -74,13 +84,13 @@ public class SampleTest extends BaseTestVariable{
         currentFolderKey = "test_question_random";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
         questionRandomTest = new TestQuestionRandom(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        //questionRandomTest.testQuestionRandom();
+        questionRandomTest.testQuestionRandom();
 
         ///正解パターン(2回目で正解(1回目は5問正解)+選択肢毎回ランダム確認テスト+期間内パターン番号の問題以外出ないか確認。
         currentFolderKey  ="test_pass_pattern_answer_random";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
         passPatternAnswerRandom = new TestPassPatternAndAnswerRandom(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        //passPatternAnswerRandom.testPassPatternAndAnswerRandom();
+        passPatternAnswerRandom.testPassPatternAndAnswerRandom();
         driver.quit();
         outputExcelPicture();
     }

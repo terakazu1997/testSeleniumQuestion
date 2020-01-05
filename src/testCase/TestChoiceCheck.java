@@ -21,7 +21,7 @@ public class TestChoiceCheck extends BaseTestVariable{
 
     public void testChoiceCheck() throws InterruptedException, IOException {
       changeFMData.updateUserFMInfoClear();
-      driver.get(FM_TOP_URL);
+      driver.navigate().refresh();
       Thread.sleep(THREAD_TIME);  // Let the user actually see something!
       TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);
       testFuncs.makeBrowserScreenShot("トップ画面初期表示");
@@ -41,6 +41,6 @@ public class TestChoiceCheck extends BaseTestVariable{
       alert.accept();
       testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
       Thread.sleep(THREAD_TIME);
-      testFuncs.underScroll( WINDOW_HEIGHT, 8,"合否結果画面スクロール", THREAD_TIME);
+      testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
     }
 }

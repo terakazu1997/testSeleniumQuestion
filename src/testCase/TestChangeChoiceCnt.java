@@ -34,7 +34,7 @@ public class TestChangeChoiceCnt extends BaseTestVariable{
                   changeFMData.UpdateQuestion5();
                   break;
           }
-          driver.get(FM_TOP_URL);
+          driver.navigate().refresh();
           Thread.sleep(THREAD_TIME);  // Let the user actually see something!
           System.out.println(currentFolderKey);
           TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);
@@ -55,7 +55,7 @@ public class TestChangeChoiceCnt extends BaseTestVariable{
           alert.accept();
           testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
           Thread.sleep(THREAD_TIME);
-          testFuncs.underScroll( WINDOW_HEIGHT, 8,"合否結果画面スクロール", THREAD_TIME);
+          testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
           changeFMData.UpdateQuestionDefault();
     }
 }

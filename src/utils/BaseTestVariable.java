@@ -27,7 +27,7 @@ public class BaseTestVariable {
     // 3回目に押下数するIDのリスト
     protected  Map<String,String>  ThirdIdListMap = new LinkedHashMap<String,String>();
     // 外貨資格更新トップ画面のURL
-    protected final static String FM_TOP_URL = "http://localhost:8888/";
+    protected final static String FM_TOP_URL = "http://192.168.3.4:8888/";
     // SELENIUM起動したときの画面サイズ　幅と高さ
     protected final static int WINDOW_WIDTH = 1280;
     protected final static int WINDOW_HEIGHT = 660;

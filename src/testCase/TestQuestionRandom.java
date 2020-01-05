@@ -22,7 +22,7 @@ public class TestQuestionRandom extends BaseTestVariable{
     public void testQuestionRandom() throws InterruptedException, IOException {
         for(int i=0; i<4; i++) {
             changeFMData.updateUserFMInfoClear();
-            driver.get(FM_TOP_URL);
+            driver.navigate().refresh();
             Thread.sleep(THREAD_TIME);  // Let the user actually see something!
             TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);          testFuncs.makeBrowserScreenShot("トップ画面初期表示");
             //1番目のボタンリストをクリック
@@ -42,7 +42,7 @@ public class TestQuestionRandom extends BaseTestVariable{
             alert.accept();
             testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
             Thread.sleep(THREAD_TIME);
-            testFuncs.underScroll( WINDOW_HEIGHT, 8,"合否結果画面スクロール", THREAD_TIME);
+            testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
         }
     }
 }

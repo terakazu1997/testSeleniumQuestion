@@ -91,17 +91,28 @@ public class TestFuncs{
     public  void checkChioces(int startCheck, int checkCount,int THREAD_TIME) throws InterruptedException, IOException {
         for(int i =startCheck; i<startCheck + 5; i++) {
             for(int j=0; j<checkCount; j++) {
-                driver.findElement(By.id(String.format("%d-%d", i,j))).click();
+                ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%d-%d').click();", i,j));
                 Thread.sleep(THREAD_TIME);
             }
+            ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%d-%d').scrollIntoView(true)", i,0));
             makeBrowserScreenShot(i+"問目の選択肢クリック_");
         }
     }
-    //下スクロール
-    public  void underScroll(int WINDOW_HEIGHT,int repeatCount,String fileName,int THREAD_TIME) throws InterruptedException, IOException {
-        for(int i =1; i<repeatCount; i++) {
-            String scrollTo = String.format("scroll(0,%d);",i * WINDOW_HEIGHT);
-            ((JavascriptExecutor) driver).executeScript(scrollTo);
+    //未回答チェック一番下スクロール
+    public void unasweredCheckUnderScroll(String btnId,String fileName,int THREAD_TIME) throws InterruptedException, IOException {
+        ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%s').scrollIntoView(true)",btnId));
+        makeBrowserScreenShot(fileName+ "_");
+        Thread.sleep(THREAD_TIME);
+    }
+
+    //合否結果画面下スクロール
+    public  void resultUnderScroll(String fileName,int THREAD_TIME) throws InterruptedException, IOException {
+        for(int i =1; i<11; i++) {
+            if(i < 10) {
+                ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('answer-%d').scrollIntoView(true)",i));
+            }else {
+                ((JavascriptExecutor) driver).executeScript("scrollBy(0,1000)");
+            }
             makeBrowserScreenShot(fileName+"_"+i + "_");
             Thread.sleep(THREAD_TIME);
         }

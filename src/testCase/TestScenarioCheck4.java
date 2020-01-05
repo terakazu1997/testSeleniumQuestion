@@ -26,14 +26,14 @@ public class TestScenarioCheck4 extends BaseTestVariable{
 
     public void testScenarioCheck4() throws InterruptedException, IOException {
       changeFMData.updateUserFMInfoClear();
-      driver.get(FM_TOP_URL);
+      driver.navigate().refresh();
       Thread.sleep(THREAD_TIME);  // Let the user actually see something!
       TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);      for(int i = 0; i<2; i++) {
           testFuncs.makeBrowserScreenShot("トップ画面初期表示");
           //1番目のボタンリストをクリック
           testFuncs.btnLinkClick(firstIdListMap, THREAD_TIME);
           //1番下までスクロール
-          testFuncs.underScroll( WINDOW_HEIGHT * 10, 2, "次のページへボタン未回答チェックスクロール", THREAD_TIME);
+          testFuncs.unasweredCheckUnderScroll("next-button", "次のページへボタン未回答チェックスクロール", THREAD_TIME);
           ///選択肢クリック1〜5 4つクリック
           testFuncs.checkChioces(1, 4, THREAD_TIME);
           //2つ目のボタンリストをクリック
@@ -41,7 +41,7 @@ public class TestScenarioCheck4 extends BaseTestVariable{
           //3つ目のボタンリストをクリック
           testFuncs.btnLinkClick(ThirdIdListMap, THREAD_TIME);
           //一番下までスクロール
-          testFuncs.underScroll( WINDOW_HEIGHT * 10, 2, "回答送信ボタン未回答チェックNGスクロール", THREAD_TIME);
+          testFuncs.unasweredCheckUnderScroll("send-answer" ,"回答送信ボタン未回答チェックNGスクロール", THREAD_TIME);
           //選択肢クリック6〜10 4つクリック
           testFuncs.checkChioces( 6, 4,THREAD_TIME);
           driver.findElement(By.id("send-answer")).click();
@@ -61,12 +61,12 @@ public class TestScenarioCheck4 extends BaseTestVariable{
           alert.accept();
           testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
           Thread.sleep(THREAD_TIME);
-          testFuncs.underScroll( WINDOW_HEIGHT, 8,"合否結果画面スクロール", THREAD_TIME);
+          testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
           changeFMData.selectFMUserInfo();
           if(i==0)driver.findElement(By.id("retest")).click();
         }
         // 直接打鍵時受講できず、合格2回のメッセージが表示されるか確認。
-        driver.get(FM_TOP_URL);
+        driver.navigate().refresh();
         testFuncs.makeBrowserScreenShot("当日受講回数2回後再読み込み_");
     }
 }
