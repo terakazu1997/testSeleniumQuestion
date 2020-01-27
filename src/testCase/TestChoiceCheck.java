@@ -1,5 +1,8 @@
 package testCase;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -9,14 +12,18 @@ import org.openqa.selenium.WebDriver;
 
 import utils.BaseTestVariable;
 import utils.TestFuncs;
+import utils.changeForeignMoneyData;
 
 public class TestChoiceCheck extends BaseTestVariable{
 
-    public TestChoiceCheck(WebDriver driver, String targetFolderPath,String currentFolderKey,Map<String, List<String>> imgFileListMap, int checkCount) {
+    public TestChoiceCheck(WebDriver driver, String targetFolderPath,String currentFolderKey,Map<String, List<String>> imgFileListMap, int checkCount) throws IOException {
         super(driver,targetFolderPath,currentFolderKey,imgFileListMap,checkCount);
         this.firstIdListMap.put("learn-link","学習リンククリック");
         this.firstIdListMap.put("test-start-btn","テスト開始ボタンクリック");
         this.secondIdListMap.put("next-button","次のページへボタンクリック");
+        file = new FileWriter(String.format("./log/全問題%dつずつ選択テスト.txt",checkCount), true);
+        pw = new PrintWriter(new BufferedWriter(file));
+        changeFMData = new changeForeignMoneyData(pw);
     }
 
     public void testChoiceCheck() throws InterruptedException, IOException {
@@ -42,5 +49,6 @@ public class TestChoiceCheck extends BaseTestVariable{
       testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
       Thread.sleep(THREAD_TIME);
       testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
+      pw.close();
     }
 }

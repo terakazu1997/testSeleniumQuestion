@@ -1,5 +1,8 @@
 package testCase;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +12,20 @@ import org.openqa.selenium.WebDriver;
 
 import utils.BaseTestVariable;
 import utils.TestFuncs;
+import utils.changeForeignMoneyData;
 
 public class TestChangeChoiceCnt extends BaseTestVariable{
 
-    public TestChangeChoiceCnt(WebDriver driver, String targetFolderPath,String currentFolderKey,Map<String, List<String>> imgFileListMap, int checkCount) {
+    public TestChangeChoiceCnt(WebDriver driver, String targetFolderPath,String currentFolderKey,Map<String, List<String>> imgFileListMap, int checkCount) throws IOException {
         super(driver,targetFolderPath,currentFolderKey,imgFileListMap,checkCount);
         //1つ目の押下するIDのリスト追加
         this.firstIdListMap.put("learn-link","学習リンククリック");
         this.firstIdListMap.put("test-start-btn","テスト開始ボタンクリック");
         //2つ目の押下するIDのリスト追加
         this.secondIdListMap.put("next-button","次のページへボタンクリック");
+        file = new FileWriter(String.format("./log/問題選択肢%d択に変更テスト.txt",checkCount), true);
+        pw = new PrintWriter(new BufferedWriter(file));
+        changeFMData = new changeForeignMoneyData(pw);
     }
     //2択、3択、5択を切り替える。
     public void testChangeChoiceCnt() throws InterruptedException, IOException {
@@ -57,5 +64,6 @@ public class TestChangeChoiceCnt extends BaseTestVariable{
           Thread.sleep(THREAD_TIME);
           testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
           changeFMData.UpdateQuestionDefault();
+          pw.close();
     }
 }

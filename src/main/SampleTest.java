@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -65,7 +66,7 @@ public class SampleTest extends BaseTestVariable{
         currentFolderKey = "test_scenario_check_4";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
         scenarioCheck4 = new TestScenarioCheck4(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        //scenarioCheck4.testScenarioCheck4();
+        scenarioCheck4.testScenarioCheck4();
         //選択肢を1つから3つ選択のテスト
         for(int i=1;i<4;i++) {
             currentFolderKey = "test_check" + i;
@@ -87,7 +88,7 @@ public class SampleTest extends BaseTestVariable{
         currentFolderKey = "test_question_random";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
         questionRandomTest = new TestQuestionRandom(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        //questionRandomTest.testQuestionRandom();
+        questionRandomTest.testQuestionRandom();
 
         ///正解パターン(2回目で正解(1回目は5問正解)+選択肢毎回ランダム確認テスト+期間内パターン番号の問題以外出ないか確認。
         currentFolderKey  ="test_pass_pattern_answer_random";
@@ -100,8 +101,8 @@ public class SampleTest extends BaseTestVariable{
     // エクセル作成用クラス
     public void outputExcelPicture() {
         // 1つあたりの画像の行数と列数
-        int pictureRows = 29;
-        int pictureCols = 13;
+        int pictureRows = 23;
+        int pictureCols = 14;
         // Exlcel作成
         XSSFWorkbook workbook = new XSSFWorkbook();
         // フォルダリストがなくなるまで繰り返す。
@@ -124,7 +125,9 @@ public class SampleTest extends BaseTestVariable{
                     // シートに、画像を貼り付け。位置→列数：0列目から現在の貼り付け位置画像の列数。行数：i*現在の貼り付け位置画像の行数+jから(i+1) * pictureRows + j
                     ClientAnchor anchor = drawing.createAnchor(0, 0, 0, 0, 0, i * pictureRows + j, pictureCols, (i + 1) * pictureRows + j);
                     int picIndex = workbook.addPicture(byteArrayOutput.toByteArray(), Workbook.PICTURE_TYPE_PNG);
-                    drawing.createPicture(anchor, picIndex);
+                    Picture pic = drawing.createPicture(anchor, picIndex);
+                    // pic.resize(Math.floor(220 / (double) img.getHeight() * 100) / 100);
+                    pic.resize(1.0);
                     // 画像タイトルを設定。画像ファイル名のフォルダの部分と時間以降の箇所をカットし、設定。位置は、i*現在の貼り付け位置画像の行数-1
                     Cell cell = sheet.createRow(i * pictureRows + j - 1).createCell(0);
                     String currentImgFIleTitle = currentImgFile;

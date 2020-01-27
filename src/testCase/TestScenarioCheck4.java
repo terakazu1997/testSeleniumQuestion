@@ -1,5 +1,8 @@
 package testCase;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -9,11 +12,12 @@ import org.openqa.selenium.WebDriver;
 
 import utils.BaseTestVariable;
 import utils.TestFuncs;
+import utils.changeForeignMoneyData;
 
 //シナリオテスト 4つ選択（ダイアログ確認と当日受講回数2回含む)
 public class TestScenarioCheck4 extends BaseTestVariable{
 
-    public TestScenarioCheck4(WebDriver driver, String targetFolderPath,String currentFolderKey,Map<String, List<String>> imgFileListMap) {
+    public TestScenarioCheck4(WebDriver driver, String targetFolderPath,String currentFolderKey,Map<String, List<String>> imgFileListMap) throws IOException {
         super(driver,targetFolderPath,currentFolderKey,imgFileListMap);
         this.firstIdListMap.put("learn-link","学習リンククリック");
         this.firstIdListMap.put("test-start-btn","テスト開始ボタンクリック");
@@ -22,13 +26,17 @@ public class TestScenarioCheck4 extends BaseTestVariable{
         this.secondIdListMap.put("prev-button","前のページへボタンクリック");
         this.ThirdIdListMap.put("next-button","次のページへボタンクリック「前→次」");
         this.ThirdIdListMap.put("send-answer","回答送信ボタン未回答チェック");
+        file = new FileWriter("./log/シナリオ兼全問題全て選択テスト.txt", true);
+        pw = new PrintWriter(new BufferedWriter(file));
+        changeFMData = new changeForeignMoneyData(pw);
     }
 
     public void testScenarioCheck4() throws InterruptedException, IOException {
       changeFMData.updateUserFMInfoClear();
       driver.navigate().refresh();
       Thread.sleep(THREAD_TIME);  // Let the user actually see something!
-      TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);      for(int i = 0; i<2; i++) {
+      TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);
+      for(int i = 0; i<2; i++) {
           testFuncs.makeBrowserScreenShot("トップ画面初期表示");
           //1番目のボタンリストをクリック
           testFuncs.btnLinkClick(firstIdListMap, THREAD_TIME);
@@ -68,5 +76,6 @@ public class TestScenarioCheck4 extends BaseTestVariable{
         // 直接打鍵時受講できず、合格2回のメッセージが表示されるか確認。
         driver.navigate().refresh();
         testFuncs.makeBrowserScreenShot("当日受講回数2回後再読み込み_");
+        pw.close();
     }
 }

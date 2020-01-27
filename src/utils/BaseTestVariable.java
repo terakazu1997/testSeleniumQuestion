@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,6 +18,11 @@ public class BaseTestVariable {
     protected String targetFolderPath;
     // 現在のフォルダーキー
     protected String currentFolderKey;
+    // ファイル
+    protected FileWriter file;
+    // ファイルに記載
+    protected PrintWriter pw;
+
     // 選択肢のチェック回数や選択肢の個数を変動させる変数
     protected int checkCount;
     // テスト用にテーブルを書き換えるクラスのインスタンス

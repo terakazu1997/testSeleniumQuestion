@@ -14,8 +14,8 @@
 	<classpathentry kind="lib" path="lib/okhttp-3.11.0.jar"/>
 	<classpathentry kind="lib" path="lib/okio-1.14.0.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse_2019-06.app/Contents/tomcat/8/lib/mysql-connector-java-8.0.18.jar"/>
-	<classpathentry kind="lib" path="lib/poi-4.1.1.jar" sourcepath="/var/folders/ct/kxxf1rlx5q32q7vjwy5n4qsc0000gn/T/.org.sf.feeling.decompiler1577722413566/source/poi-4.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="/Applications/Eclipse_2019-06.app/Contents/tomcat/8/lib/mysql-connector-java-8.0.18.jar" sourcepath="/var/folders/ct/kxxf1rlx5q32q7vjwy5n4qsc0000gn/T/.org.sf.feeling.decompiler1580002733623/source/mysql-connector-java-8.0.18-sources.jar"/>
+	<classpathentry kind="lib" path="lib/poi-4.1.1.jar" sourcepath="/var/folders/ct/kxxf1rlx5q32q7vjwy5n4qsc0000gn/T/.org.sf.feeling.decompiler1578032362188/source/poi-4.1.1-sources-1578318385268.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-4.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-4.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/xmlbeans-3.1.0.jar"/>
