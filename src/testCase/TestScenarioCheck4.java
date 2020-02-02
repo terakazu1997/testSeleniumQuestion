@@ -11,8 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import utils.BaseTestVariable;
+import utils.ChangeSelectQuestionAnswerData;
+import utils.ChangeSelectUserData;
 import utils.TestFuncs;
-import utils.changeForeignMoneyData;
 
 //シナリオテスト 4つ選択（ダイアログ確認と当日受講回数2回含む)
 public class TestScenarioCheck4 extends BaseTestVariable{
@@ -28,11 +29,12 @@ public class TestScenarioCheck4 extends BaseTestVariable{
         this.ThirdIdListMap.put("send-answer","回答送信ボタン未回答チェック");
         file = new FileWriter("./log/シナリオ兼全問題全て選択テスト.txt", true);
         pw = new PrintWriter(new BufferedWriter(file));
-        changeFMData = new changeForeignMoneyData(pw);
+        questionData  = new ChangeSelectQuestionAnswerData (pw);
+        userData = new ChangeSelectUserData(pw);
     }
 
     public void testScenarioCheck4() throws InterruptedException, IOException {
-      changeFMData.updateUserFMInfoClear();
+      userData.updateUserFMInfoClear();
       driver.navigate().refresh();
       Thread.sleep(THREAD_TIME);  // Let the user actually see something!
       TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);
@@ -70,7 +72,7 @@ public class TestScenarioCheck4 extends BaseTestVariable{
           testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
           Thread.sleep(THREAD_TIME);
           testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
-          changeFMData.selectFMUserInfo();
+          userData.selectFMUserInfo();
           if(i==0)driver.findElement(By.id("retest")).click();
         }
         // 直接打鍵時受講できず、合格2回のメッセージが表示されるか確認。

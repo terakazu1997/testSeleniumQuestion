@@ -27,6 +27,16 @@ public class BaseTestVariable {
     protected int checkCount;
     // テスト用にテーブルを書き換えるクラスのインスタンス
     protected changeForeignMoneyData changeFMData = new changeForeignMoneyData();
+    // 問題を書き換えるようインスタンス
+    protected ChangeSelectQuestionAnswerData questionData = new ChangeSelectQuestionAnswerData();
+    // 期間情報を書き換えるようインスタンス
+    protected ChangeSelectPeriodData periodData = new ChangeSelectPeriodData();
+    // ユーザ情報を書き換えるようインスタンス
+    protected ChangeSelectUserData userData = new ChangeSelectUserData();
+
+    // 受講履歴を取得するインスタンス
+    protected SelectForeignHistoryData foreignHistoryData = new SelectForeignHistoryData();
+
     // 1回目に押下するIDのリスト
     protected Map<String,String> firstIdListMap = new LinkedHashMap<String,String>();
     // 2回目に押下するIDのリスト
@@ -52,7 +62,6 @@ public class BaseTestVariable {
             put("test_change_choice2", "問題選択肢2択に変更テスト");
             put("test_change_choice3", "問題選択肢3択に変更テスト");
             put("test_change_choice5", "問題選択肢5択に変更テスト");
-            put("test_question_random", "問題毎回ランダム確認テスト");
             put("test_pass_pattern_answer_random", "正解パターン(2回目で正解、1回目で正解)と選択肢毎回ランダム確認テスト");
         }
     };

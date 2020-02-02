@@ -1,44 +1,20 @@
 package utils;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class changeForeignMoneyData {
-    Connection conn = null;
-    PreparedStatement ps  = null;
-    ResultSet rs = null;
-    Statement st = null;
-    PrintWriter pw;
-    public changeForeignMoneyData() {
-    }
-    public changeForeignMoneyData(PrintWriter pw) {
-       this.pw = pw;
-    }
-    public void initConnectionDB()  {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+public class ChangeSelectQuestionAnswerData extends BaseDatabase {
 
-        // (1) 接続用のURIを用意する(必要に応じて認証指示user/passwordを付ける)
-        String uri = "jdbc:mysql://localhost:3306/test_mysql_database";
-        String user = "root";
-        String password = "admin";
-        // (2) DriverManagerクラスのメソッドで接続する
-        conn = DriverManager.getConnection(uri,user,password);
-        } catch (SQLException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        }
+    public ChangeSelectQuestionAnswerData(PrintWriter pw) {
+        super(pw);
     }
+
+    public ChangeSelectQuestionAnswerData() {
+    }
+
     public void selectFMQuestionInfo() {
         initConnectionDB();
         try {
+            pw.println("・外貨資格更新問題、回答テーブル整形内容");
             //-> データを取得するSQLを準備
             ps = conn.prepareStatement(
                     "SELECT\n" +
@@ -70,13 +46,8 @@ public class changeForeignMoneyData {
             //-> SQLを実行してデータを取得
             rs = ps.executeQuery();
             //-> データを表示
-            pw.print("パターン-カテゴリ-問題番号-選択肢の連番,");
-            pw.print("問題文,");
-            pw.print("解説,");
-            pw.print("問題削除有無,");
-            pw.print("選択肢内容,");
-            pw.print("正否,");
-            pw.println("正否削除有無");
+            pw.println("パターン-カテゴリ-問題番号-選択肢の連番,問題文,解説,問題削除有無,選択肢内容,正否,正否削除有無");
+            pw.println("(削除有無は、削除フラグが1なら削除済み1以外なら削除されていないと表示、正否は正答フラグが1なら正答、1以外なら不正答を表示)");
             while(rs.next()) {
                 pw.print(rs.getString("uniqueNum"));
                 pw.print(", ");
@@ -100,43 +71,6 @@ public class changeForeignMoneyData {
         }
     }
 
-    public void selectFMUserInfo() {
-        initConnectionDB();
-        try {
-            //-> データを取得するSQLを準備
-            ps = conn.prepareStatement(
-              "select USER_ID, LAST_FM_PASS_DT, LAST_FM_AD_DT, FM_AD_DAY_COUNT,LAST_FM_SCORE,LAST_FM_PASS_NO from LUSER where USER_ID = ?"
-            );
-            //-> SQLを実行してデータを取得
-            ps.setString(1, "A497480");
-            rs = ps.executeQuery();
-            //-> データを表示
-            rs.next();
-            pw.print("ユーザID,");
-            pw.print("最終受講日,");
-            pw.print("最終合格日,");
-            pw.print("当日受講回数,");
-            pw.println("最終取得点数");
-            pw.println("最終合格番号");
-            pw.print(rs.getString("USER_ID"));
-            pw.print(", ");
-            pw.print(rs.getString("LAST_FM_AD_DT"));
-            pw.print(", ");
-            pw.print(rs.getString("LAST_FM_PASS_DT"));
-            pw.print(", ");
-            pw.print(rs.getInt("FM_AD_DAY_COUNT"));
-            pw.print(", ");
-            pw.print(rs.getInt("LAST_FM_SCORE"));
-            pw.print(", ");
-            pw.println(rs.getInt("LAST_FM_PASS_NO"));
-            rs.close();
-            ps.close();
-        } catch (SQLException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        }
-
-    }
     public void UpdateQuestionDefault() {
         // (3) SQL送信用インスタンスの作成
         initConnectionDB();
@@ -165,7 +99,6 @@ public class changeForeignMoneyData {
             e.printStackTrace();
         }
     }
-
     public void UpdateQuestion2() {
         // (3) SQL送信用インスタンスの作成
         initConnectionDB();
@@ -230,19 +163,30 @@ public class changeForeignMoneyData {
         }
     }
 
-    public void updateAllPass() {
+    public void updateMakeTestQuestion(int questionCnt,int[] choicePassStatus, String deleteProcess) {
         // (3) SQL送信用インスタンスの作成
         initConnectionDB();
         try {
-            ps = conn.prepareStatement(
-                "UPDATE FMUQ SET PATTERN_NO = 'X'"
-            );
-            ps.executeUpdate();
-            ps = conn.prepareStatement(
-                "UPDATE FMUA SET PATTERN_NO = 'X'"
-            );
-            ps.executeUpdate();
-            for(int i =1; i< 11; i++) {
+            if(deleteProcess.equals("patternX")){
+                ps = conn.prepareStatement(
+                    "UPDATE FMUQ SET PATTERN_NO = 'X'"
+                );
+                ps.executeUpdate();
+                ps = conn.prepareStatement(
+                    "UPDATE FMUA SET PATTERN_NO = 'X'"
+                );
+                ps.executeUpdate();
+            } else if(deleteProcess.equals("deleteFlg")) {
+                ps = conn.prepareStatement(
+                    "UPDATE FMUQ SET DELETE_FLG = '1'"
+                );
+                ps.executeUpdate();
+                ps = conn.prepareStatement(
+                    "UPDATE FMUA SET DELETE_FLG = '1'"
+                );
+                ps.executeUpdate();
+            }
+            for(int i =1; i<= questionCnt; i++) {
                 ps = conn.prepareStatement(
                      "insert into FMUQ VALUES('A','2',?,?,?,'')"
                  );
@@ -252,55 +196,25 @@ public class changeForeignMoneyData {
                 ps.executeUpdate();
                 for(int j=1; j<5; j++) {
                     ps = conn.prepareStatement(
-                        "INSERT INTO FMUA VALUES ('A','2',?,?,?,'1','');"
+                        "INSERT INTO FMUA VALUES ('A','2',?,?,?,?,'');"
                     );
                     ps.setInt(1, i);
                     ps.setInt(2, j);
                     ps.setString(3, String.format("%d問目の%dつ目の選択肢", i,j));
-                    ps.executeUpdate();
-                }
-            }
-            selectFMQuestionInfo();
-            ps.close();
-         } catch (SQLException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        }
-    }
-
-    public void updateQuestionRandom25() {
-        // (3) SQL送信用インスタンスの作成
-        initConnectionDB();
-        try {
-            ps = conn.prepareStatement(
-                "UPDATE FMUQ SET PATTERN_NO = 'X'"
-            );
-            ps.executeUpdate();
-            ps = conn.prepareStatement(
-                "UPDATE FMUA SET PATTERN_NO = 'X'"
-            );
-            ps.executeUpdate();
-            for(int i =1; i< 26; i++) {
-                ps = conn.prepareStatement(
-                     "insert into FMUQ VALUES('A','2',?,?,?,'')"
-                 );
-                ps.setInt(1, i);
-                ps.setString(2, String.format("%d問目の問題", i));
-                ps.setString(3, String.format("%d問目の問題の解説", i));
-                ps.executeUpdate();
-                for(int j=1; j<5; j++) {
-                    if(j <= 2) {
-                        ps = conn.prepareStatement(
-                            "INSERT INTO FMUA VALUES ('A','2',?,?,?,'1','');"
-                        );
-                    } else {
-                        ps = conn.prepareStatement(
-                            "INSERT INTO FMUA VALUES ('A','2',?,?,?,'0','');"
-                        );
+                    switch(j) {
+                        case 1:
+                            ps.setInt(4, choicePassStatus[0]);
+                            break;
+                        case 2:
+                            ps.setInt(4, choicePassStatus[1]);
+                            break;
+                        case 3:
+                            ps.setInt(4, choicePassStatus[2]);
+                            break;
+                        case 4:
+                            ps.setInt(4, choicePassStatus[3]);
+                            break;
                     }
-                    ps.setInt(1, i);
-                    ps.setInt(2, j);
-                    ps.setString(3, String.format("%d問目の%dつ目の選択肢", i,j));
                     ps.executeUpdate();
                 }
             }
@@ -373,18 +287,4 @@ public class changeForeignMoneyData {
             e.printStackTrace();
         }
     }
-    public void updateUserFMInfoClear() {
-        // (3) SQL送信用インスタンスの作成
-        initConnectionDB();
-        try {
-            Statement st = conn.createStatement();
-            st.executeUpdate("UPDATE LUSER SET LAST_FM_PASS_NO = 0,LAST_FM_AD_DT = NULL,FM_AD_DAY_COUNT = 0 WHERE USER_ID = 'A497480';");
-            st.close();
-            conn.close();
-            selectFMUserInfo();
-        } catch (SQLException e) {
-            // TODO 自動生成された catch ブロック
-            e.printStackTrace();
-        }
-    }
-}
+  }

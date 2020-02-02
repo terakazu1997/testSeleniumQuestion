@@ -25,8 +25,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import testCase.TestChangeChoiceCnt;
 import testCase.TestChoiceCheck;
-import testCase.TestPassPatternAndAnswerRandom;
-import testCase.TestQuestionRandom;
+import testCase.TestPassPattern;
 import testCase.TestScenarioCheck4;
 import utils.BaseTestVariable;
 import utils.TestFuncs;
@@ -36,9 +35,8 @@ public class SampleTest extends BaseTestVariable{
     private TestChoiceCheck checkTest;
 
     //テストクラス
-    private TestQuestionRandom questionRandomTest;
     private TestScenarioCheck4 scenarioCheck4;
-    private TestPassPatternAndAnswerRandom passPatternAnswerRandom;
+    private TestPassPattern passPatternAnswerRandom;
     private TestChangeChoiceCnt changeChoiceCntTest;
 
     // コンストラクタ フォルダ作成して、準備をする。
@@ -84,16 +82,10 @@ public class SampleTest extends BaseTestVariable{
             changeChoiceCntTest.testChangeChoiceCnt();
         }
 
-        //問題毎回ランダム確認テスト
-        currentFolderKey = "test_question_random";
-        targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
-        questionRandomTest = new TestQuestionRandom(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        questionRandomTest.testQuestionRandom();
-
         ///正解パターン(2回目で正解(1回目は5問正解)+選択肢毎回ランダム確認テスト+期間内パターン番号の問題以外出ないか確認。
         currentFolderKey  ="test_pass_pattern_answer_random";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
-        passPatternAnswerRandom = new TestPassPatternAndAnswerRandom(driver,targetFolderPath,currentFolderKey, imgFileListMap);
+        passPatternAnswerRandom = new TestPassPattern(driver,targetFolderPath,currentFolderKey, imgFileListMap);
         passPatternAnswerRandom.testPassPatternAndAnswerRandom();
         driver.quit();
         outputExcelPicture();

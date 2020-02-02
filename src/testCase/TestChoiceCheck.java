@@ -11,8 +11,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import utils.BaseTestVariable;
+import utils.ChangeSelectUserData;
 import utils.TestFuncs;
-import utils.changeForeignMoneyData;
 
 public class TestChoiceCheck extends BaseTestVariable{
 
@@ -23,11 +23,11 @@ public class TestChoiceCheck extends BaseTestVariable{
         this.secondIdListMap.put("next-button","次のページへボタンクリック");
         file = new FileWriter(String.format("./log/全問題%dつずつ選択テスト.txt",checkCount), true);
         pw = new PrintWriter(new BufferedWriter(file));
-        changeFMData = new changeForeignMoneyData(pw);
+        userData = new ChangeSelectUserData(pw);
     }
 
     public void testChoiceCheck() throws InterruptedException, IOException {
-      changeFMData.updateUserFMInfoClear();
+      userData.updateUserFMInfoClear();
       driver.navigate().refresh();
       Thread.sleep(THREAD_TIME);  // Let the user actually see something!
       TestFuncs testFuncs = new TestFuncs(driver, targetFolderPath,imgFileListMap,currentFolderKey);

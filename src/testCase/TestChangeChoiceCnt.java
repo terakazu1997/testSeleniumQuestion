@@ -11,8 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import utils.BaseTestVariable;
+import utils.ChangeSelectQuestionAnswerData;
+import utils.ChangeSelectUserData;
 import utils.TestFuncs;
-import utils.changeForeignMoneyData;
 
 public class TestChangeChoiceCnt extends BaseTestVariable{
 
@@ -25,20 +26,21 @@ public class TestChangeChoiceCnt extends BaseTestVariable{
         this.secondIdListMap.put("next-button","次のページへボタンクリック");
         file = new FileWriter(String.format("./log/問題選択肢%d択に変更テスト.txt",checkCount), true);
         pw = new PrintWriter(new BufferedWriter(file));
-        changeFMData = new changeForeignMoneyData(pw);
+        questionData  = new ChangeSelectQuestionAnswerData (pw);
+        userData = new ChangeSelectUserData(pw);
     }
     //2択、3択、5択を切り替える。
     public void testChangeChoiceCnt() throws InterruptedException, IOException {
-          changeFMData.updateUserFMInfoClear();
+          userData.updateUserFMInfoClear();
           switch(checkCount) {
               case 2:
-                  changeFMData.UpdateQuestion2();
+                  questionData.UpdateQuestion2();
                   break;
               case 3:
-                  changeFMData.UpdateQuestion3();
+                  questionData.UpdateQuestion3();
                   break;
               case 5:
-                  changeFMData.UpdateQuestion5();
+                  questionData.UpdateQuestion5();
                   break;
           }
           driver.navigate().refresh();
@@ -63,7 +65,7 @@ public class TestChangeChoiceCnt extends BaseTestVariable{
           testFuncs.makeBrowserScreenShot("回答ダイアログOKクリック");
           Thread.sleep(THREAD_TIME);
           testFuncs.resultUnderScroll("合否結果画面スクロール", THREAD_TIME);
-          changeFMData.UpdateQuestionDefault();
+          questionData.UpdateQuestionDefault();
           pw.close();
     }
 }
