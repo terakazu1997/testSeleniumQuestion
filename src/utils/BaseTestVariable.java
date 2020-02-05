@@ -10,6 +10,11 @@ import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 
+import database.ChangeSelectPeriodData;
+import database.ChangeSelectQuestionAnswerData;
+import database.ChangeSelectUserData;
+import database.changeForeignMoneyData;
+
 //基幹変数クラス
 public class BaseTestVariable {
     // Webdriver
@@ -33,16 +38,17 @@ public class BaseTestVariable {
     protected ChangeSelectPeriodData periodData = new ChangeSelectPeriodData();
     // ユーザ情報を書き換えるようインスタンス
     protected ChangeSelectUserData userData = new ChangeSelectUserData();
-
-    // 受講履歴を取得するインスタンス
-    protected SelectForeignHistoryData foreignHistoryData = new SelectForeignHistoryData();
-
-    // 1回目に押下するIDのリスト
-    protected Map<String,String> firstIdListMap = new LinkedHashMap<String,String>();
-    // 2回目に押下するIDのリスト
-    protected Map<String,String>  secondIdListMap = new LinkedHashMap<String,String>();
-    // 3回目に押下数するIDのリスト
-    protected  Map<String,String>  ThirdIdListMap = new LinkedHashMap<String,String>();
+    // 押下するIDのリスト
+    protected Map<String,String> idMAP = new LinkedHashMap<String,String>(){
+        {
+            put("learn-link","学習ファイルリンク押下");
+            put("test-start-btn","テスト開始ボタン押下");
+            put("next-button","次のページへボタン押下");
+            put("prev-button","前のページへボタン押下");
+            put("send-answer","回答送信ボタン押下");
+            put("re-test","再テストボタン押下");
+        }
+    };
     // 外貨資格更新トップ画面のURL
     protected final static String FM_TOP_URL = "http://192.168.3.4:8888/";
     // SELENIUM起動したときの画面サイズ　幅と高さ
@@ -55,14 +61,19 @@ public class BaseTestVariable {
     //フォルダリストどんどん追加していく。
     protected final static Map<String,String> folderList = new HashMap<String,String>(){
         {
-            put("test_scenario_check_4", "シナリオ兼全問題全て選択テスト");
-            put("test_check1", "全問題1つずつ選択テスト");
-            put("test_check2", "全問題2つずつ選択テスト");
-            put("test_check3", "全問題3つずつ選択テスト");
-            put("test_change_choice2", "問題選択肢2択に変更テスト");
-            put("test_change_choice3", "問題選択肢3択に変更テスト");
-            put("test_change_choice5", "問題選択肢5択に変更テスト");
-            put("test_pass_pattern_answer_random", "正解パターン(2回目で正解、1回目で正解)と選択肢毎回ランダム確認テスト");
+            put("test_screen_operation", "画面動作確認");
+            put("test_no_check","未回答チェック確認");
+            put("test_attendance_day_count","当日受講回数超過確認");
+            put("test_pass_pattern", "正解パターン(2回目で正解、1回目で正解)確認");
+            put("test_check1", "全問題1つずつ選択確認");
+            put("test_check2", "全問題2つずつ選択確認");
+            put("test_check3", "全問題3つずつ選択確認");
+            put("test_change_choice1", "問題選択肢1択に変更確認");
+            put("test_change_choice2", "問題選択肢2択に変更確認");
+            put("test_change_choice3", "問題選択肢3択に変更確認");
+            put("test_change_choice5", "問題選択肢5択に変更確認");
+            put("test_max_question_cnt", "問題最大格納時表示確認");
+
         }
     };
     // 画像ファイルのリスト キーがフォルダリストのキーと同様　値が画像ファイルがリストでファイルようにする。

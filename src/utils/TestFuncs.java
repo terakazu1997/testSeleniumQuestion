@@ -77,6 +77,12 @@ public class TestFuncs{
             e.printStackTrace();
         }
     }
+    // id押下まとめ
+    public void idClick(Map<String,String> idMap,String id,int THREAD_TIME) throws InterruptedException, IOException {
+        driver.findElement(By.id(id)).click();
+        Thread.sleep(THREAD_TIME);  // Let the user actually see something!
+        makeBrowserScreenShot(idMap.get(id));
+    }
 
     // ボタンリンク押下まとめ
     public  void btnLinkClick(Map<String,String> idListMap,int THREAD_TIME) throws InterruptedException, IOException {
@@ -98,13 +104,48 @@ public class TestFuncs{
             makeBrowserScreenShot(i+"問目の選択肢クリック_");
         }
     }
+    //選択肢のチェックをつける。(未回答チェックの試験
+    public  void checkChioce(int checkTarget, int checkCount,int THREAD_TIME) throws InterruptedException, IOException {
+        for(int j=0; j<checkCount; j++) {
+            ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%d-%d').click();", checkTarget,j));
+            Thread.sleep(THREAD_TIME);
+        }
+        ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%d-%d').scrollIntoView(true)", checkTarget,0));
+        makeBrowserScreenShot(checkTarget+"問目の選択肢クリック_");
+    }
+    //選択肢のチェックをつける。(間違え確認のチェック）
+    public  void checkChiocesNotPass(int startCheck, int THREAD_TIME) throws InterruptedException, IOException {
+        for(int i =startCheck; i<startCheck + 5; i++) {
+            for(int j=1; j<4; j++) {
+                ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%d-%d').click();", i,j));
+                Thread.sleep(THREAD_TIME);
+            }
+            ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%d-%d').scrollIntoView(true)", i,0));
+            makeBrowserScreenShot(i+"問目の選択肢クリック_");
+        }
+    }
     //未回答チェック一番下スクロール
     public void unasweredCheckUnderScroll(String btnId,String fileName,int THREAD_TIME) throws InterruptedException, IOException {
         ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('%s').scrollIntoView(true)",btnId));
         makeBrowserScreenShot(fileName+ "_");
         Thread.sleep(THREAD_TIME);
     }
-
+    //テスト画面1ページ目上スクロール
+    public  void test1UpperScroll(String fileName,int THREAD_TIME) throws InterruptedException, IOException {
+        for(int i =5; 0 < i; i--) {
+           ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('question-%d').scrollIntoView(true)",i));
+            makeBrowserScreenShot(fileName+"_"+i + "_");
+            Thread.sleep(THREAD_TIME);
+        }
+    }
+    //テスト画面2ページ目上スクロール
+    public  void test2UpperScroll(String fileName,int THREAD_TIME) throws InterruptedException, IOException {
+        for(int i =10; 5 < i; i--) {
+            ((JavascriptExecutor) driver).executeScript(String.format("document.getElementById('question-%d').scrollIntoView(true)",i));
+            makeBrowserScreenShot(fileName+"_"+i + "_");
+            Thread.sleep(THREAD_TIME);
+        }
+    }
     //合否結果画面下スクロール
     public  void resultUnderScroll(String fileName,int THREAD_TIME) throws InterruptedException, IOException {
         for(int i =1; i<11; i++) {

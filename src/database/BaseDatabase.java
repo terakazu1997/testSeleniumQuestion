@@ -1,4 +1,4 @@
-package utils;
+package database;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -14,11 +14,11 @@ public class BaseDatabase {
     protected ResultSet rs = null;
     protected Statement st = null;
     protected PrintWriter pw;
-
+    public BaseDatabase() {
+     }
     public BaseDatabase(PrintWriter pw) {
        this.pw = pw;
     }
-    public BaseDatabase() {}
     public void initConnectionDB() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

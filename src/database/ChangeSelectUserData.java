@@ -1,13 +1,16 @@
-package utils;
+package database;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ChangeSelectUserData extends BaseDatabase{
-    public ChangeSelectUserData() {
-     }
+
     public ChangeSelectUserData(PrintWriter pw) {
        super(pw);
+    }
+
+    public ChangeSelectUserData() {
+        // TODO 自動生成されたコンストラクター・スタブ
     }
 
     public void selectFMUserInfo() {

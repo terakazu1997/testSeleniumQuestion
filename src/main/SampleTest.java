@@ -23,21 +23,29 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import testCase.TestChangeChoiceCnt;
+import testCase.TestAttendanceDayCount;
+import testCase.TestChangeChoiceCount;
 import testCase.TestChoiceCheck;
+import testCase.TestMaxQuestionCount;
+import testCase.TestNoCheck;
 import testCase.TestPassPattern;
-import testCase.TestScenarioCheck4;
+import testCase.TestScreenOperation;
 import utils.BaseTestVariable;
 import utils.TestFuncs;
 
 public class SampleTest extends BaseTestVariable{
     private String shapingToday;
-    private TestChoiceCheck checkTest;
 
     //テストクラス
-    private TestScenarioCheck4 scenarioCheck4;
-    private TestPassPattern passPatternAnswerRandom;
-    private TestChangeChoiceCnt changeChoiceCntTest;
+    private TestScreenOperation test1;
+    private TestNoCheck test2;
+    private TestAttendanceDayCount test3;
+    private TestPassPattern test4;
+    private TestChoiceCheck test5;
+    private TestChangeChoiceCount test6;
+    private TestMaxQuestionCount test7;
+
+
 
     // コンストラクタ フォルダ作成して、準備をする。
     public SampleTest() {
@@ -61,32 +69,43 @@ public class SampleTest extends BaseTestVariable{
         ((JavascriptExecutor) driver).executeScript(String.format("window.open('%s','fm','location=0','menubar=0','status=0,toolbar=0,scrollbars=1,width=%d,height=%d,directories=0,resizable=0');", FM_TOP_URL,WINDOW_WIDTH,WINDOW_HEIGHT));
         driver.switchTo().window("fm");
         //シナリオテスト 4つ選択（ダイアログ確認と当日受講回数2回含む)
-        currentFolderKey = "test_scenario_check_4";
+        currentFolderKey = "test_screen_operation";
         targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
-        scenarioCheck4 = new TestScenarioCheck4(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        scenarioCheck4.testScenarioCheck4();
+        test1 = new TestScreenOperation(driver,targetFolderPath,currentFolderKey, imgFileListMap);
+        test1.execute();
+        currentFolderKey = "test_no_check";
+        test2 = new TestNoCheck(driver,targetFolderPath,currentFolderKey, imgFileListMap);
+        test2.execute();
+        currentFolderKey = "test_attendance_day_count";
+        test3 = new TestAttendanceDayCount(driver,targetFolderPath,currentFolderKey, imgFileListMap);
+        test3.execute();
+        currentFolderKey  ="test_pass_pattern";
+        // 正解パターン確認テスト
+        targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
+        test4= new TestPassPattern(driver,targetFolderPath,currentFolderKey, imgFileListMap);
+        test4.execute();
+
         //選択肢を1つから3つ選択のテスト
         for(int i=1;i<4;i++) {
             currentFolderKey = "test_check" + i;
             targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
-            checkTest = new TestChoiceCheck(driver,targetFolderPath,currentFolderKey, imgFileListMap, i);
-            checkTest.testChoiceCheck();
+            test5 = new TestChoiceCheck(driver,targetFolderPath,currentFolderKey, imgFileListMap, i);
+            test5.execute();
         }
 
-        //問題2、3、5択に変更テスト
-        for(int i = 2;i < 6; i++) {
+        //問題1、2、3、5択に変更テスト
+        for(int i = 1;i < 6; i++) {
             if(i == 4) continue;
             currentFolderKey = "test_change_choice" + i;
             targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
-            changeChoiceCntTest = new TestChangeChoiceCnt(driver,targetFolderPath,currentFolderKey,imgFileListMap, i);
-            changeChoiceCntTest.testChangeChoiceCnt();
+            test6= new TestChangeChoiceCount(driver,targetFolderPath,currentFolderKey,imgFileListMap, i);
+            test6.execute();
         }
+        // 問題最大格納時表示確認
+        currentFolderKey = "test_max_question_cnt";
+        test7 = new TestMaxQuestionCount(driver,targetFolderPath,currentFolderKey,imgFileListMap);
+        test7.execute();
 
-        ///正解パターン(2回目で正解(1回目は5問正解)+選択肢毎回ランダム確認テスト+期間内パターン番号の問題以外出ないか確認。
-        currentFolderKey  ="test_pass_pattern_answer_random";
-        targetFolderPath = shapingToday + "/" + folderList.get(currentFolderKey) + "/";
-        passPatternAnswerRandom = new TestPassPattern(driver,targetFolderPath,currentFolderKey, imgFileListMap);
-        passPatternAnswerRandom.testPassPatternAndAnswerRandom();
         driver.quit();
         outputExcelPicture();
     }
